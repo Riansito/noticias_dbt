@@ -2,7 +2,7 @@ WITH author_data AS (
 
     SELECT DISTINCT
 
-        (author ->> 'id')::BIGINT AS author_id,
+        (author ->> 'id') AS author_id,
 
         NULLIF(TRIM(author ->> 'name'), '') AS author_name
 
