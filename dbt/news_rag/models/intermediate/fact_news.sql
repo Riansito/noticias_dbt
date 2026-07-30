@@ -48,8 +48,6 @@ SELECT
 
     summary,
 
-    body,
-
     article_url,
 
     image_url,
