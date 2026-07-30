@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: dim_language
+    description: "Dimensão contendo idiomas."
+
+    columns:
+
+      - name: language_key
+        data_tests:
+          - unique
+          - not_null
+
+      - name: language
+        data_tests:
+          - not_null

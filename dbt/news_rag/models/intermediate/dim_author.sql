@@ -9,7 +9,7 @@ WITH author_data AS (
     FROM {{ ref('stg_news') }}
 
     WHERE author IS NOT NULL
-
+    AND author ->> 'id' IS NOT NULL
 )
 
 SELECT

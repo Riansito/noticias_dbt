@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: dim_category
+    description: "Dimensão contendo categorias IPTC."
+
+    columns:
+
+      - name: category_key
+        data_tests:
+          - unique
+          - not_null
+
+      - name: category_id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: category_name
+        data_tests:
+          - not_null
+
+      - name: taxonomy
+        data_tests:
+          - not_null

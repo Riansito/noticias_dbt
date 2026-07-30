@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: dim_author
+    description: "Dimensão contendo autores."
+
+    columns:
+
+      - name: author_key
+        data_tests:
+          - unique
+          - not_null
+
+      - name: author_id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: author_name
+        data_tests:
+          - not_null

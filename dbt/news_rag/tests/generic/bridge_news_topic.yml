@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: bridge_news_topic
+
+    columns:
+
+      - name: news_key
+        tests:
+          - relationships:
+              to: ref('fact_news')
+              field: news_key
+
+      - name: topic_key
+        tests:
+          - relationships:
+              to: ref('dim_topic')
+              field: topic_key

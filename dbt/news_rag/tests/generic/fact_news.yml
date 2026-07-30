@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: fact_news
+    columns:
+
+      - name: news_key
+        tests:
+          - not_null
+          - unique
+
+      - name: news_id
+        tests:
+          - not_null
+          - unique
+
+      - name: source_key
+        tests:
+          - relationships:
+              to: ref('dim_source')
+              field: source_key
+
+      - name: author_key
+        tests:
+          - relationships:
+              to: ref('dim_author')
+              field: author_key
+
+      - name: sentiment_key
+        tests:
+          - relationships:
+              to: ref('dim_sentiment')
+              field: sentiment_key
+
+      - name: language
+        tests:
+          - not_null
+
+      - name: published_at
+        tests:
+          - not_null
+
+      - name: title
+        tests:
+          - not_null

@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: dim_source
+    description: "Dimensão contendo os veículos/fontes das notícias."
+
+    columns:
+
+      - name: source_key
+        description: "Chave substituta da fonte."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: source_id
+        description: "Identificador natural da API."
+        data_tests:
+          - unique
+          - not_null
+
+      - name: domain
+        description: "Domínio do portal."
+        data_tests:
+          - not_null
+
+      - name: source_type
+        description: "Tipo da fonte."
+        data_tests:
+          - not_null
+
+      - name: country_code
+        description: "Código ISO do país."

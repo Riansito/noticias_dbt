@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: dim_topic
+    description: "Dimensão contendo tópicos da notícia."
+
+    columns:
+
+      - name: topic_key
+        data_tests:
+          - unique
+          - not_null
+
+      - name: topic_id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: topic_name
+        data_tests:
+          - not_null

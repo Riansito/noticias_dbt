@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: dim_sentiment
+    description: "Dimensão contendo combinações de sentimento."
+
+    columns:
+
+      - name: sentiment_key
+        data_tests:
+          - unique
+          - not_null
+
+      - name: body_polarity
+        data_tests:
+          - not_null
+
+      - name: title_polarity
+        data_tests:
+          - not_null
+
+      - name: overall_polarity
+        data_tests:
+          - not_null
+
+      - name: body_score
+        data_tests:
+          - not_null
+
+      - name: title_score
+        data_tests:
+          - not_null
+
+      - name: overall_score
+        data_tests:
+          - not_null

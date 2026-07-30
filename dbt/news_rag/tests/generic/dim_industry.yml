@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: dim_industry
+    description: "Dimensão contendo indústrias/setores."
+
+    columns:
+
+      - name: industry_key
+        data_tests:
+          - unique
+          - not_null
+
+      - name: industry_id
+        data_tests:
+          - unique
+          - not_null
+
+      - name: industry_name
+        data_tests:
+          - not_null
