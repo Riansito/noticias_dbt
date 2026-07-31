@@ -12,13 +12,16 @@ load_dotenv(BASE_DIR / ".env")
 sys.path.append(str(BASE_DIR))
 
 from database.connection import engine
-from rag.embedding_service import generate_embedding
+from rag.embedding_service import generate_embeddings_batch
+
+
+def chunk_list(lst, batch_size):
+    """Divide uma lista em pedaços de tamanho fixo."""
+    for i in range(0, len(lst), batch_size):
+        yield lst[i : i + batch_size]
 
 
 def process_embeddings() -> None:
-    """
-    Gera e salva os embeddings noticia por noticia no PostgreSQL.
-    """
     select_query = text("""
         SELECT
             m.news_key,
@@ -51,37 +54,45 @@ def process_embeddings() -> None:
     if not rows:
         return
 
-    records_to_insert = []
-    
-    for idx, row in enumerate(rows, start=1):
-        try:
-            embedding = generate_embedding(row.context)
+    # Reduzido de 25 para 5 para não estourar o limite de payload/tokens das matérias
+    BATCH_SIZE = 5
+    processed_count = 0
 
-            records_to_insert.append({
-                "news_key": row.news_key,
-                "context": row.context,
-                "embedding": json.dumps(embedding),
-            })
+    for chunk in chunk_list(rows, BATCH_SIZE):
+        texts = [r.context for r in chunk]
+        embeddings = None
 
-            if idx % 50 == 0 or idx == total:
-                # Salva no banco a cada 50 itens processados
-                with engine.begin() as conn:
-                    conn.execute(insert_query, records_to_insert)
-                print(f"Progresso: {idx}/{total} notícias processadas e salvas.")
-                records_to_insert.clear()
+        for attempt in range(1, 4):
+            try:
+                embeddings = generate_embeddings_batch(texts)
+                break
+            except Exception as e:
+                print(
+                    f"⚠️ Erro no lote (tentativa {attempt}/3): {e}. Aguardando 3s..."
+                )
+                time.sleep(3)
 
-            # Pausa curta de 50ms para respeitar a API
-            time.sleep(0.05)
+        if not embeddings:
+            print("❌ Não foi possível gerar embeddings para este lote. Pulei.")
+            continue
 
-        except Exception as e:
-            print(f"Erro ao processar noticia news_key={row.news_key}: {e}")
-            # Salva o que já foi gerado até o momento do erro
-            if records_to_insert:
-                with engine.begin() as conn:
-                    conn.execute(insert_query, records_to_insert)
-            raise e
+        records_to_insert = [
+            {
+                "news_key": r.news_key,
+                "context": r.context,
+                "embedding": json.dumps(emb),
+            }
+            for r, emb in zip(chunk, embeddings)
+        ]
 
-    print("Embeddings gerados e salvos com sucesso!")
+        with engine.begin() as conn:
+            conn.execute(insert_query, records_to_insert)
+
+        processed_count += len(chunk)
+        print(f"Progresso: {processed_count}/{total} notícias salvas.")
+        time.sleep(0.5)
+
+    print("✨ Processamento finalizado com sucesso!")
 
 
 if __name__ == "__main__":

@@ -1,46 +1,17 @@
 import os
 import sys
-import requests
-from pathlib import Path
-from dotenv import load_dotenv
+from google import genai
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / ".env")
+api_key = os.getenv("GEMINI_API_KEY")
+if not api_key:
+    sys.exit("ERRO: GEMINI_API_KEY não configurada.")
 
-sys.path.append(str(BASE_DIR))
-
-API_KEY = os.getenv("GEMINI_API_KEY")
+client = genai.Client(api_key=api_key)
 
 
-def generate_embedding(text: str) -> list[float]:
-    """
-    Gera embedding utilizando a API do Gemini (text-embedding-004).
-    Tamanho do vetor retornado: 768
-    """
-    if not text:
-        return []
-
-    # Endpoint oficial usando o parâmetro key
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key={API_KEY}"
-
-    payload = {
-        "model": "models/text-embedding-004",
-        "content": {
-            "parts": [{"text": text}]
-        }
-    }
-
-    headers = {"Content-Type": "application/json"}
-
-    response = requests.post(url, json=payload, headers=headers)
-
-    # Caso a chave exija cabeçalho Bearer (contas institucionais)
-    if response.status_code in (401, 403):
-        url_no_key = "https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent"
-        headers["Authorization"] = f"Bearer {API_KEY}"
-        response = requests.post(url_no_key, json=payload, headers=headers)
-
-    response.raise_for_status()
-
-    data = response.json()
-    return data["embedding"]["values"]
+def generate_embeddings_batch(texts: list[str]) -> list[list[float]]:
+    """Gera embeddings para uma lista de textos em uma única requisição HTTP."""
+    response = client.models.embed_content(
+        model="text-embedding-004", contents=texts
+    )
+    return [e.values for e in response.embeddings]
