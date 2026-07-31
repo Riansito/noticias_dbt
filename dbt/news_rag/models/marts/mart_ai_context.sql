@@ -122,7 +122,37 @@ SELECT
 
     f.published_at,
 
-    f.ingested_at
+    f.ingested_at,
+
+    CONCAT_WS(
+
+        E'\n\n',
+
+        'Title: ' || COALESCE(f.title,''),
+
+        'Description: ' || COALESCE(f.description,''),
+
+        'Summary: ' || COALESCE(f.summary,''),
+
+        'Author: ' || COALESCE(a.author_name,''),
+
+        'Source: ' || COALESCE(s.domain,''),
+
+        'Country: ' || COALESCE(s.country_name,''),
+
+        'Categories: ' || COALESCE(c.categories,''),
+
+        'Topics: ' || COALESCE(t.topics,''),
+
+        'Industries: ' || COALESCE(i.industries,''),
+
+        'Sentiment: '
+        || COALESCE(se.overall_polarity,'')
+        || ' ('
+        || COALESCE(se.overall_score::text,'')
+        || ')'
+
+    ) AS context
 
 FROM {{ ref('fact_news') }} f
 

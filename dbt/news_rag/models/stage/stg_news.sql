@@ -1,3 +1,9 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='news_id'
+    )
+}}
 WITH ranked_news AS (
 
     SELECT
@@ -26,9 +32,19 @@ WITH ranked_news AS (
         -- URLs
         -------------------------------------------------------------------------
 
-        payload ->> 'href' AS article_url,
+        CASE
+            WHEN payload ->> 'href' LIKE '//%' THEN
+                'https:' || (payload ->> 'href')
+            ELSE
+                payload ->> 'href'
+        END AS article_url,
 
-        payload ->> 'image' AS image_url,
+        CASE
+            WHEN payload ->> 'image' LIKE '//%' THEN
+                'https:' || (payload ->> 'image')
+            ELSE
+                payload ->> 'image'
+        END AS image_url,
 
 
         -------------------------------------------------------------------------
@@ -82,17 +98,25 @@ WITH ranked_news AS (
 
         ROW_NUMBER() OVER (
 
-            PARTITION BY 
+            PARTITION BY
                 (payload ->> 'id')::BIGINT
 
-            ORDER BY 
+            ORDER BY
                 ingested_at DESC
 
         ) AS rn
 
 
     FROM {{ source('raw', 'news') }}
+{% if is_incremental() %}
 
+WHERE ingested_at >
+(
+    SELECT COALESCE(MAX(ingested_at), '1900-01-01')
+    FROM {{ this }}
+)
+
+{% endif %}
 )
 
 

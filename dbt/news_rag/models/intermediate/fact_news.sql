@@ -1,3 +1,10 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='news_id'
+    )
+}}
+
 WITH source_lookup AS (
 
     SELECT *
@@ -22,6 +29,7 @@ sentiment_lookup AS (
 
 )
 
+
 SELECT
 
     ----------------------------------------------------
@@ -31,6 +39,8 @@ SELECT
     {{ dbt_utils.generate_surrogate_key(['news_id']) }} AS news_key,
 
     news_id,
+
+    api_news_id,
 
     s.source_key,
 
