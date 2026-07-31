@@ -31,6 +31,9 @@ env/
 .DS_Store
 Thumbs.db
 
+**/.user.yml
+**/profiles.yml
+
 # ==========================
 # Logs
 # ==========================
