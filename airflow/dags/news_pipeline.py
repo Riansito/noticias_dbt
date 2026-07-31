@@ -36,13 +36,5 @@ with DAG(
         """
     )
 
-    generate_embeddings = BashOperator(
-        task_id="generate_embeddings",
-        bash_command="""
-        cd /opt/airflow/project &&
-        python rag/generate_embeddings.py
-        """
-    )
-
-    # Fluxo do pipeline: Ingestão -> dbt Run -> dbt Test -> Embeddings
-    ingest_news >> dbt_run >> dbt_test >> generate_embeddings
+    # Fluxo do pipeline: Ingestão -> dbt Run -> dbt Test 
+    ingest_news >> dbt_run >> dbt_test 
