@@ -82,6 +82,8 @@ Entre os principais objetivos estão:
             ▼
    Respostas em linguagem natural
 ```
+Imagem da arquitetura:
+<img width="1672" height="941" alt="ChatGPT Image 1 de ago  de 2026, 15_49_37" src="https://github.com/user-attachments/assets/83a50022-e1e7-49cf-b301-cc2b5873f7c7" />
 
 ---
 
@@ -258,6 +260,7 @@ Ao receber uma pergunta do usuário, a aplicação:
 5. retorna uma resposta em linguagem natural.
 
 Dessa forma, o modelo responde com base nas informações armazenadas no Data Warehouse, reduzindo alucinações e tornando as respostas mais consistentes.
+<img width="1917" height="903" alt="Captura de tela 2026-08-01 160827" src="https://github.com/user-attachments/assets/75309863-e141-4038-b29c-451fa518676c" />
 
 ---
 
