@@ -308,7 +308,7 @@ O Airflow será responsável por:
 ## Executar o chatbot
 
 ```bash
-python chatbot.py
+python chatbot/app.py
 ```
 
 Faça perguntas como:
