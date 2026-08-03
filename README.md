@@ -340,6 +340,6 @@ Faça perguntas como:
 
 **Rian**
 
-Estudante de Sistemas de Informação na UFPB, com foco em Engenharia de Dados, Analytics e Inteligência Artificial.
+Estudante de Sistemas de Informação na UFPB, com foco em Engenharia de Dados e Analytics.
 
 Este projeto foi desenvolvido com o objetivo de consolidar conhecimentos em pipelines de dados modernos, modelagem analítica e integração com modelos de IA generativa, simulando uma arquitetura próxima à utilizada em ambientes de produção.
