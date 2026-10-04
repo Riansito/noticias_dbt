@@ -54,7 +54,7 @@ with st.sidebar:
         contexto_noticias = buscar_contexto_noticias(limite=100)
         st.success("Conectado à View do dbt!")
         st.metric(label="Notícias Carregadas", value=100)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         st.error(f"Erro na conexão com o Banco: {e}")
         contexto_noticias = None
 
@@ -106,5 +106,5 @@ if user_input := st.chat_input("Pergunte algo sobre as notícias tratadas pelo d
                 st.session_state.messages.append(
                     {"role": "assistant", "content": response.text}
                 )
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 st.error(f"Erro ao processar resposta: {e}")
