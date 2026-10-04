@@ -37,13 +37,26 @@ def load_raw(news: list[dict]) -> None:
         DO NOTHING;
     """)
 
-    rows = [
-        {
-            "news_id": item["id"],
-            "payload": json.dumps(item),
-        }
-        for item in news
-    ]
+    from ingestion.schemas import NewsItem
+    from pydantic import ValidationError
+
+    rows = []
+    for item in news:
+        try:
+            # Valida e converte o item pelo modelo
+            valid_item = NewsItem(**item)
+            rows.append(
+                {
+                    "news_id": valid_item.id,
+                    "payload": valid_item.model_dump_json(),
+                }
+            )
+        except ValidationError as e:
+            print(f"Erro de validação no item {item.get('id')}: {e}")
+            continue
+
+    if not rows:
+        return
 
     with engine.begin() as conn:
         conn.execute(query, rows)
