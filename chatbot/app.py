@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
 import streamlit as st
-from dotenv import load_dotenv
 import psycopg2  # Mantendo o seu driver de banco de dados
 from google import genai
+
+from config import settings
 
 # Configuração da página do Streamlit
 st.set_page_config(
@@ -12,23 +13,20 @@ st.set_page_config(
     layout="wide"
 )
 
-env_path = Path(__file__).resolve().parent.parent / "config" / ".env"
-load_dotenv(env_path)
-
 # 1. Configuração do Cliente Gemini
 @st.cache_resource
 def get_gemini_client():
-    return genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+    return genai.Client(api_key=settings.GEMINI_API_KEY)
 
 # 2. Busca o contexto direto do banco
 @st.cache_data(ttl=300)  # Cache de 5 minutos para economizar chamadas ao banco
-def buscar_contexto_noticias(limite=15):
+def buscar_contexto_noticias(limite=100):
     conn = psycopg2.connect(
-        host=os.getenv("HOST_DB", "localhost"),
-        database=os.getenv("DATABASE_DB", "postgres"),
-        user=os.getenv("USER_DB", "postgres"),
-        password=os.getenv("PASSWORD_DB", "postgres"),
-        port=os.getenv("PORT_DB", "5432")
+        host=settings.DB_HOST,
+        database=settings.DB_DATABASE,
+        user=settings.DB_USER,
+        password=settings.DB_PASSWORD,
+        port=settings.DB_PORT
     )
     cursor = conn.cursor()
     
@@ -54,9 +52,9 @@ st.caption("Interface de consumo interativa para o pipeline de Engenharia de Dad
 with st.sidebar:
     st.header("⚙️ Status do Pipeline")
     try:
-        contexto_noticias = buscar_contexto_noticias(limite=15)
+        contexto_noticias = buscar_contexto_noticias(limite=100)
         st.success("Conectado à View do dbt!")
-        st.metric(label="Notícias Carregadas", value=15)
+        st.metric(label="Notícias Carregadas", value=100)
     except Exception as e:
         st.error(f"Erro na conexão com o Banco: {e}")
         contexto_noticias = None
