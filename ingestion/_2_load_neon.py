@@ -1,13 +1,10 @@
 import json
 
-from sqlalchemy import text
-
 # Carrega o arquivo .env
-import os
-from pathlib import Path
-from dotenv import load_dotenv
 import sys
 from pathlib import Path
+
+from sqlalchemy import text
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 

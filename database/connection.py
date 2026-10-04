@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 
-
 # Carrega o arquivo .env
 env_path = Path(__file__).resolve().parent.parent / "config" / ".env"
 load_dotenv(env_path)
