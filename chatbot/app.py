@@ -94,18 +94,17 @@ if user_input := st.chat_input("Pergunte algo sobre as notícias tratadas pelo d
         """
 
         # Resposta da LLM
-        with st.chat_message("assistant"):
-            with st.spinner("Analisando notícias..."):
-                try:
-                    client = get_gemini_client()
-                    # MANTIDO O MESMO MODELO QUE VOCÊ JÁ VALIDOU:
-                    response = client.models.generate_content(
-                        model="models/gemini-3.1-flash-lite",
-                        contents=prompt,
-                    )
-                    st.markdown(response.text)
-                    st.session_state.messages.append(
-                        {"role": "assistant", "content": response.text}
-                    )
-                except Exception as e:
-                    st.error(f"Erro ao processar resposta: {e}")
+        with st.chat_message("assistant"), st.spinner("Analisando notícias..."):
+            try:
+                client = get_gemini_client()
+                # MANTIDO O MESMO MODELO QUE VOCÊ JÁ VALIDOU:
+                response = client.models.generate_content(
+                    model="models/gemini-3.1-flash-lite",
+                    contents=prompt,
+                )
+                st.markdown(response.text)
+                st.session_state.messages.append(
+                    {"role": "assistant", "content": response.text}
+                )
+            except Exception as e:
+                st.error(f"Erro ao processar resposta: {e}")
