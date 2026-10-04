@@ -1,22 +1,20 @@
-import os
-from pathlib import Path
-import streamlit as st
 import psycopg2  # Mantendo o seu driver de banco de dados
+import streamlit as st
 from google import genai
 
 from config import settings
 
 # Configuração da página do Streamlit
 st.set_page_config(
-    page_title="Data Assistant - DBT News",
-    page_icon="📰",
-    layout="wide"
+    page_title="Data Assistant - DBT News", page_icon="📰", layout="wide"
 )
+
 
 # 1. Configuração do Cliente Gemini
 @st.cache_resource
 def get_gemini_client():
     return genai.Client(api_key=settings.GEMINI_API_KEY)
+
 
 # 2. Busca o contexto direto do banco
 @st.cache_data(ttl=300)  # Cache de 5 minutos para economizar chamadas ao banco
@@ -26,10 +24,10 @@ def buscar_contexto_noticias(limite=100):
         database=settings.DB_DATABASE,
         user=settings.DB_USER,
         password=settings.DB_PASSWORD,
-        port=settings.DB_PORT
+        port=settings.DB_PORT,
     )
     cursor = conn.cursor()
-    
+
     # Nome da sua View do dbt
     query = """
         SELECT context 
@@ -40,9 +38,10 @@ def buscar_contexto_noticias(limite=100):
     cursor.execute(query, (limite,))
     rows = cursor.fetchall()
     conn.close()
-    
+
     blocos = [row[0] for row in rows if row[0]]
     return "\n\n====================\n\n".join(blocos)
+
 
 # --- INTERFACE VISUAL ---
 st.title("🤖 Data Assistant - Consumo de View dbt")
@@ -105,6 +104,8 @@ if user_input := st.chat_input("Pergunte algo sobre as notícias tratadas pelo d
                         contents=prompt,
                     )
                     st.markdown(response.text)
-                    st.session_state.messages.append({"role": "assistant", "content": response.text})
+                    st.session_state.messages.append(
+                        {"role": "assistant", "content": response.text}
+                    )
                 except Exception as e:
                     st.error(f"Erro ao processar resposta: {e}")

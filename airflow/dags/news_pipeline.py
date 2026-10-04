@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from airflow import DAG
 from airflow.operators.bash import BashOperator
 
+from airflow import DAG
 
 with DAG(
     dag_id="news_pipeline",
@@ -11,13 +11,12 @@ with DAG(
     catchup=False,
     tags=["news", "dbt", "rag"],
 ) as dag:
-
     ingest_news = BashOperator(
         task_id="ingest_news",
         bash_command="""
         cd /opt/airflow/project &&
         python ingestion/_3_pipeline.py
-        """
+        """,
     )
 
     dbt_run = BashOperator(
@@ -25,7 +24,7 @@ with DAG(
         bash_command="""
         cd /opt/airflow/project/dbt/news_rag &&
         dbt run --profiles-dir /opt/airflow/project/dbt
-        """
+        """,
     )
 
     dbt_test = BashOperator(
@@ -33,8 +32,8 @@ with DAG(
         bash_command="""
         cd /opt/airflow/project/dbt/news_rag &&
         dbt test --profiles-dir /opt/airflow/project/dbt
-        """
+        """,
     )
 
-    # Fluxo do pipeline: Ingestão -> dbt Run -> dbt Test 
-    ingest_news >> dbt_run >> dbt_test 
+    # Fluxo do pipeline: Ingestão -> dbt Run -> dbt Test
+    ingest_news >> dbt_run >> dbt_test
