@@ -1,4 +1,3 @@
-import json
 
 # Carrega o arquivo .env
 import sys
@@ -37,8 +36,9 @@ def load_raw(news: list[dict]) -> None:
         DO NOTHING;
     """)
 
-    from ingestion.schemas import NewsItem
     from pydantic import ValidationError
+
+    from ingestion.schemas import NewsItem
 
     rows = []
     for item in news:

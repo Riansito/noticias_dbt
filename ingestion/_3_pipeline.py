@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 from ingestion._1_extract_news import extract_news
 from ingestion._2_load_neon import load_raw
-from dotenv import load_dotenv
 
 # Carrega variáveis de ambiente
 env_path = Path(__file__).resolve().parent.parent / "config" / ".env"

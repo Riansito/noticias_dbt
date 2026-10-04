@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 from airflow.operators.bash import BashOperator
 
@@ -6,7 +6,7 @@ from airflow import DAG
 
 with DAG(
     dag_id="news_pipeline",
-    start_date=datetime(2026, 1, 1),
+    start_date=datetime(2026, 1, 1, tzinfo=UTC),
     schedule="0 */6 * * *",
     catchup=False,
     tags=["news", "dbt", "rag"],
