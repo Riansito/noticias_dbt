@@ -121,6 +121,14 @@ Imagem da arquitetura:
 * Requests
 * SQLAlchemy
 * Psycopg2
+* Pydantic (Validação de dados)
+
+### Engenharia de Software & DevOps
+
+* Pytest (Testes Unitários)
+* Ruff (Linting & Formatação)
+* GitHub Actions (CI/CD)
+* Logging (Observabilidade)
 
 ---
 
@@ -330,7 +338,6 @@ Faça perguntas como:
 * API REST para consulta das notícias
 * Dashboard em Power BI
 * Monitoramento com Prometheus e Grafana
-* CI/CD utilizando GitHub Actions
 * Deploy em ambiente cloud
 * Cache de consultas utilizando Redis
 
