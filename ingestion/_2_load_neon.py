@@ -1,4 +1,3 @@
-
 # Carrega o arquivo .env
 import sys
 from pathlib import Path
