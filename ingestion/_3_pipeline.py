@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-from _1_extract_news import extract_news
-from _2_load_neon import load_raw
+from ingestion._1_extract_news import extract_news
+from ingestion._2_load_neon import load_raw
 from dotenv import load_dotenv
 
 # Carrega variáveis de ambiente
