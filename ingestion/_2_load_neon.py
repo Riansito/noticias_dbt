@@ -37,6 +37,7 @@ def load_raw(news: list[dict]) -> None:
 
     from pydantic import ValidationError
 
+    from config.logger import logger
     from ingestion.schemas import NewsItem
 
     rows = []
@@ -51,10 +52,11 @@ def load_raw(news: list[dict]) -> None:
                 }
             )
         except ValidationError as e:
-            print(f"Erro de validação no item {item.get('id')}: {e}")
+            logger.warning(f"Erro de validação no item {item.get('id')}: {e}")
             continue
 
     if not rows:
+        logger.info("Nenhuma notícia válida para carregar.")
         return
 
     with engine.begin() as conn:
